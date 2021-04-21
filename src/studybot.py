@@ -1,10 +1,10 @@
 import json
-
-from schemas.cs61b_schema import CS61B
 from datetime import date
 
+from schemas.cs61b_schema import CS61B
 
-class AlgoBot:
+
+class StudyBot:
 
     def __init__(self, channel, manifest_file):
         self.today = date.today().strftime("%Y-%m-%d")
@@ -30,9 +30,9 @@ class AlgoBot:
                     "text": (
                         f"CS61B for {self.today}: " + f"*{entry[CS61B.lecture_title]}*\n" +
                         "\tReading: "               + f"<{entry[CS61B.reading_link]}|{entry[CS61B.reading_title]}.>\n" +
-                        "\tVideos: "                + f"<{entry[CS61B.lecture_video]}|link.>\n" + 
+                        "\tVideos: "                + f"<{entry[CS61B.lecture_video]}|link.>\n" +
                         "\tGuide: "                 + f"<{entry[CS61B.lecture_guide]}|link.>\n" +
-                        "\tDiscussion: "            + f"<{entry[CS61B.discussion_worksheet]}|link.>\n" + 
+                        "\tDiscussion: "            + f"<{entry[CS61B.discussion_worksheet]}|link.>\n" +
                         "\tDiscussion Solution: "   + f"<{entry[CS61B.discussion_solution]}|link.>"
                     ),
                 },

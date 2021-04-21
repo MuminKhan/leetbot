@@ -7,14 +7,14 @@ from slack import WebClient
 from slack.errors import SlackApiError
 from slack.web.client import WebClient
 
-from algobot import AlgoBot
+from studybot import StudyBot
 
 # slack info
 slack_web_client = WebClient(token=os.environ.get("SLACK_TOKEN"))
 slack_channel = "slack-dev"
 
 def get_message():
-    bot = AlgoBot(slack_channel, "test/example_manifest.json")
+    bot = StudyBot(slack_channel, "test/example_manifest.json")
     message = bot.get_message_payload()
     return message
 
