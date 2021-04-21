@@ -139,3 +139,4 @@ cython_debug/
 
 # ignore 
 misc/
+.vscode/settings.json

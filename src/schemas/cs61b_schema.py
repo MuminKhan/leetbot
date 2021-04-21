@@ -1,6 +1,7 @@
 class CS61B: 
     id                      = "id"
-    reading                 = "reading"
+    reading_title           = "reading_title"
+    reading_link            = "reading_link"
     lecture_title           = "lecture_title"
     lecture_video           = "lecture_video"
     lecture_slides          = "lecture_slides"

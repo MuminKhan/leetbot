@@ -23,23 +23,22 @@ class AlgoBot:
 
         for entry in date_entries:
 
-            message = {
+            block = {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
                     "text": (
-                        f"CS61B for {self.today}: " + f"{entry[CS61B.lecture_title]}\n" +
-                        "\tReading: "               + f"{entry[CS61B.reading]}\n" +
-                        "\tVideos: "                + f"{entry[CS61B.lecture_video]}\n" + 
-                        "\tGuide: "                 + f"{entry[CS61B.lecture_guide]}\n" +
-                        "\tDiscussion: "            + f"{entry[CS61B.discussion_worksheet]}\n" + 
-                        "\tDiscussion Solution: "   + f"{entry[CS61B.discussion_solution]}" 
+                        f"CS61B for {self.today}: " + f"*{entry[CS61B.lecture_title]}*\n" +
+                        "\tReading: "               + f"<{entry[CS61B.reading_link]}|{entry[CS61B.reading_title]}.>\n" +
+                        "\tVideos: "                + f"<{entry[CS61B.lecture_video]}|link.>\n" + 
+                        "\tGuide: "                 + f"<{entry[CS61B.lecture_guide]}|link.>\n" +
+                        "\tDiscussion: "            + f"<{entry[CS61B.discussion_worksheet]}|link.>\n" + 
+                        "\tDiscussion Solution: "   + f"<{entry[CS61B.discussion_solution]}|link.>"
                     ),
                 },
             }
-            messages.append(message)
+            messages.append(block)
 
-        print(len(messages))
         return messages
 
     def get_message_payload(self) -> dict:
