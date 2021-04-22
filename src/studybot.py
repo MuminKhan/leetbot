@@ -38,6 +38,8 @@ class StudyBot:
         messages = self._build_messages(date_entries)
         return {
             "channel": self.channel,
+            "unfurl_links": False,
+            "unfurl_media": False,
             "blocks": [
                 *messages,
             ],
