@@ -23,6 +23,7 @@ def parse_template(template: str, manifest_entry: dict) -> str:
             top = message[0:open_brace_index]
             bottom = message[close_brace_index+1:]
             message = top + manifest_entry[key] + bottom
+            i = 0
 
         i += 1
 

@@ -9,13 +9,13 @@ from slack.web.client import WebClient
 from studybot import StudyBot
 
 # slack info
-slack_web_client = WebClient(token=os.environ.get("SLACK_TOKEN"))
+slack_web_client = WebClient(token=os.environ.get("ALGOBOT_SLACK_TOKEN"))
 
 def parse_args():
   parser = argparse.ArgumentParser()
 
   parser.add_argument('--channel',  required=True,  dest='channel',       action='store', help='Channel to post to. Bot must be a member to post.')
-  parser.add_argument('--manifest', required=True,  dest='manifest_file', action='store', help='Location of manifest file')
+  parser.add_argument('--manifest', required=True,  dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
   parser.add_argument('--template', required=True,  dest='template_file', action='store', help='Template file location') 
 
   args = parser.parse_args()
@@ -23,10 +23,12 @@ def parse_args():
 
 def post_to_slack(slack_client, message):
   try:
-    slack_client.chat_postMessage(**message)
+    response = slack_client.chat_postMessage(**message)
   except SlackApiError as e:
     logging.error(f'Request to Slack API Failed: {e.response.status_code}.')
     logging.error(e.response)
+  
+  return response
 
 
 if __name__ == "__main__":
@@ -39,4 +41,10 @@ if __name__ == "__main__":
     bot = StudyBot(args.channel, args.manifest_file, args.template_file)
     message = bot.get_message_payload()
 
-    post_to_slack(slack_web_client, message)
+    if message is not None:
+      response = post_to_slack(slack_web_client, message)
+    else:
+      print('Nothing to post...')
+
+
+    print("\n\n\nRESPONSE: \n" + str(response))

@@ -1,0 +1,6 @@
+CS61B for today: *{lecture_title}*
+    Reading: <{reading_link}|{reading_title}.>
+    Videos: <{lecture_video}|link.>
+    Guide: <{lecture_guide}|link.>
+    Discussion: <{discussion_worksheet}|link.>
+    Discussion Solution: <{discussion_solution}|link.>
