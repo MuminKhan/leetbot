@@ -39,8 +39,8 @@ class StudyBot:
                 else:
                     print(f"Malformed line: {line}")
 
-
         return manifest.get(self.today, [])
+
 
     def _build_messages(self, date_entries):
         template = message_utils.get_message_template(self.template_file)

@@ -22,6 +22,7 @@ def parse_args():
   return args
 
 def post_to_slack(slack_client, message):
+  response = None
   try:
     response = slack_client.chat_postMessage(**message)
   except SlackApiError as e:
@@ -46,5 +47,4 @@ if __name__ == "__main__":
     else:
       print('Nothing to post...')
 
-
-    print("\n\n\nRESPONSE: \n" + str(response))
+    print(f"\n\n\nRESPONSE: \n{str(response)}") if response is not None else print('')
