@@ -19,6 +19,10 @@ def parse_args():
   parser.add_argument('--template', '-t', required=True,  dest='template_file', action='store', help='Template file location') 
 
   args = parser.parse_args()
+
+  print('Args:')
+  [print(f'\t{k}: {v}') for k,v in args.__dict__.items()]
+
   return args
 
 def post_to_slack(slack_client, message):
@@ -26,8 +30,8 @@ def post_to_slack(slack_client, message):
   try:
     response = slack_client.chat_postMessage(**message)
   except SlackApiError as e:
-    logging.error(f'Request to Slack API Failed: {e.response.status_code}.')
-    logging.error(e.response)
+    print(f'Request to Slack API Failed: {e.response.status_code}.')
+    print(e.response)
   
   return response
 

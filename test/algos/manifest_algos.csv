@@ -1,5 +1,5 @@
 date,week,number,name,url,difficulty,type
-2021-05-31,0,1,2-Sum,https://leetcode.com/problems/two-sum/,Easy,Array
+2021-05-24,0,1,2-Sum,https://leetcode.com/problems/two-sum/,Easy,Array
 2021-06-01,1,13,Roman to Integer,https://leetcode.com/problems/roman-to-integer/,Easy,Math
 2021-06-02,1,67,Add Binary,https://leetcode.com/problems/add-binary/,Easy,Math
 2021-06-03,1,202,Happy Number,https://leetcode.com/problems/happy-number/,Easy,Math
@@ -9,3 +9,8 @@ date,week,number,name,url,difficulty,type
 2021-06-09,2,53,Maximum Subarray,https://leetcode.com/problems/maximum-subarray/,Easy,Array
 2021-06-10,2,11,Container with Most Water,https://leetcode.com/problems/container-with-most-water/,Medium,Array
 2021-06-11,2,15,3-Sum,https://leetcode.com/problems/3sum/,Medium,Array
+2021-06-14,3,21,Merge Two Sorted Lists,https://leetcode.com/problems/merge-two-sorted-lists/,Easy,Linked List
+2021-06-15,3,83,Remove Duplicates from Sorted List,https://leetcode.com/problems/remove-duplicates-from-sorted-list/,Easy,Linked List
+2021-06-16,3,160,Intersection of Two Linked Lists,https://leetcode.com/problems/intersection-of-two-linked-lists/,Easy,Linked List
+2021-06-17,3,2,Add Two Numbers,https://leetcode.com/problems/add-two-numbers/,Medium,Linked List
+2021-06-18,3,147,Insertion Sort List,https://leetcode.com/problems/insertion-sort-list/,Medium,Linked List
