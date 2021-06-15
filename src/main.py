@@ -42,6 +42,7 @@ if __name__ == "__main__":
     bot = StudyBot(args.channel, args.manifest_file, args.template_file)
     message = bot.get_message_payload()
 
+    response = None
     if message is not None:
       response = post_to_slack(slack_web_client, message)
     else:
