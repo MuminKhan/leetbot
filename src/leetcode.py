@@ -12,16 +12,16 @@ class LeetCode:
         self.LEETCODE_PROB_URL = f"{self.LEETCODE_BASE_URL}/problems"
         self.LEETCODE_QUES_URL = f"{self.LEETCODE_BASE_URL}/api/problems/all/"
         self.DESIRED_QUESTION_FIELDS = ['difficulty', 'frequency', 'frontend_question_id', 'paid_only',
-                                   'question__article__has_video_solution', 'question__article__live', 'question__article__slug',
-                                   'question__hide', 'question__title', 'question__title_slug',
-                                   'question_id', 'status', 'total_acs', 'total_submitted']
+                                        'question__article__has_video_solution', 'question__article__live', 'question__article__slug',
+                                        'question__hide', 'question__title', 'question__title_slug',
+                                        'question_id', 'status', 'total_acs', 'total_submitted']
         self.DIFFICULTY_MAPPING = {1: 'easy', 2: 'medium', 3: 'hard'}
 
         response = self.get_leetcode_data(self.LEETCODE_QUES_URL)
         json_response = json.load(response)
-
         self.questions_by_id = self.__organize_questions_by_id(json_response)
-        self.questions_by_difficulty = self.__organize_questions_by_difficulty(json_response)
+        self.questions_by_difficulty = self.__organize_questions_by_difficulty(
+            json_response)
 
     def get_leetcode_data(self, url) -> dict:
         request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
