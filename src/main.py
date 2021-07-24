@@ -1,3 +1,4 @@
+
 import argparse
 import logging
 import slack_utils
@@ -9,9 +10,10 @@ from studybot import StudyBot
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--channel',  '-c', required=True, dest='channel',       action='store', help='Channel to post to. Bot must be a member to post.')
-    parser.add_argument('--manifest', '-m', required=True, dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
-    parser.add_argument('--template', '-t', required=True, dest='template_file', action='store', help='Template file location')
+    parser.add_argument('--channel',   '-c', required=True,  dest='channel',       action='store', help='Channel to post to. Bot must be a member to post.')
+    parser.add_argument('--manifest',  '-m', required=True,  dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
+    parser.add_argument('--template',  '-t', required=True,  dest='template_file', action='store', help='Template file location')
+    
 
     args = parser.parse_args()
 
@@ -28,6 +30,10 @@ if __name__ == "__main__":  # entrypoint
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
+
+    lc = LeetCode()
+    
+
 
     bot = StudyBot(args.channel, args.manifest_file, args.template_file)
     message = bot.get_message_payload()
