@@ -33,19 +33,18 @@ class StudyBot:
 
                 if manifest.get(line[0]) is None:
                     manifest[line[0]] = []
-                
+
                 if len(line) == len(header):
-                    manifest[line[0]].append({k:v for k,v in zip(header[1:], line[1:])})
+                    manifest[line[0]].append({k: v for k, v in zip(header[1:], line[1:])})
                 else:
                     print(f"Malformed line: {line}")
 
         return manifest.get(self.today, [])
 
-
     def _build_messages(self, date_entries):
         template = message_utils.get_message_template(self.template_file)
         messages = []
-        
+
         for entry in date_entries:
             message = message_utils.parse_template(template, entry)
             block = {
@@ -67,7 +66,7 @@ class StudyBot:
             date_entries = self._get_entries_from_json_manifest()
         else:
             raise Exception(f'{self.manifest_file} does not appear to be a CSV or JSON.')
-        
+
         messages = self._build_messages(date_entries)
         if len(messages) == 0:
             return None

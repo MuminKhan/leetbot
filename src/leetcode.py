@@ -20,8 +20,7 @@ class LeetCode:
         response = self.get_leetcode_data(self.LEETCODE_QUES_URL)
         json_response = json.load(response)
         self.questions_by_id = self.__organize_questions_by_id(json_response)
-        self.questions_by_difficulty = self.__organize_questions_by_difficulty(
-            json_response)
+        self.questions_by_difficulty = self.__organize_questions_by_difficulty(json_response)
 
     def get_leetcode_data(self, url) -> dict:
         request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
