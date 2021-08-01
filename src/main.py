@@ -1,8 +1,9 @@
 
 import argparse
 import logging
-import slack_utils
 
+import data
+import slack_utils
 from leetcode import LeetCode
 from studybot import StudyBot
 
@@ -13,7 +14,7 @@ def parse_args():
     parser.add_argument('--channel',   '-c', required=True,  dest='channel',       action='store', help='Channel to post to. Bot must be a member to post.')
     parser.add_argument('--manifest',  '-m', required=True,  dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
     parser.add_argument('--template',  '-t', required=True,  dest='template_file', action='store', help='Template file location')
-    
+    parser.add_argument('--data_file', '-d', required=False, dest='data_file',     action='store', help='Where to read/write posted questions. Default="./algobot.json"', default='algobot.json')
 
     args = parser.parse_args()
 
@@ -31,8 +32,10 @@ if __name__ == "__main__":  # entrypoint
     logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
 
+    posted_questions = data.read_posted_questions(args.data_file)
+
     lc = LeetCode()
-    
+    all_questions = lc.questions_by_id
 
 
     bot = StudyBot(args.channel, args.manifest_file, args.template_file)
