@@ -1,1 +1,0 @@
-python src\main.py -c algorithms_leetcode_study_group -m test\example_manifest.csv -t test\example_template.txt

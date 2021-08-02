@@ -1,5 +1,0 @@
-Week {week} question incoming @channel! Please post solutions and their complexity (Big-O) to this thread.
-    Question: *{number}. {name}*
-    Difficulty: {difficulty}
-    Type: {type}
-    URL: <{url}|link.>

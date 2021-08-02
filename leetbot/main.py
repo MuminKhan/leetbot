@@ -2,9 +2,9 @@
 import argparse
 import logging
 
-import data
+import data_loader
 import slack_utils
-from leetcode import LeetCode
+from leetcode.leetcode import LeetCode
 from studybot import StudyBot
 
 
