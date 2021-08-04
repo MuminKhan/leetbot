@@ -2,19 +2,22 @@
 import argparse
 import logging
 
-import data_loader
-import slack_utils
-from leetcode.leetcode import LeetCode
-from studybot import StudyBot
+import slack_client
+from leetbot.posted_leetcode_questions import PostedLeetCodeQuestions
+from leetcode import LeetCode
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--channel',   '-c', required=True,  dest='channel',       action='store', help='Channel to post to. Bot must be a member to post.')
-    parser.add_argument('--manifest',  '-m', required=True,  dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
-    parser.add_argument('--template',  '-t', required=True,  dest='template_file', action='store', help='Template file location')
-    parser.add_argument('--data_file', '-d', required=False, dest='data_file',     action='store', help='Where to read/write posted questions. Default="./algobot.json"', default='algobot.json')
+    parser.add_argument('--channel',   '-c', required=True,  dest='channel',
+                        action='store', help='Channel to post to. Bot must be a member to post.')
+    parser.add_argument('--manifest',  '-m', required=True,  dest='manifest_file',
+                        action='store', help='Location of manifest file. Must be a .csv or .json.')
+    parser.add_argument('--template',  '-t', required=True,
+                        dest='template_file', action='store', help='Template file location')
+    parser.add_argument('--data_file', '-d', required=False, dest='data_file',     action='store',
+                        help='Where to read/write posted questions. Default="./algobot.json"', default='algobot.json')
 
     args = parser.parse_args()
 
@@ -24,27 +27,30 @@ def parse_args():
     return args
 
 
-if __name__ == "__main__":  # entrypoint
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+if __name__ == "__main__":  
 
     args = parse_args()
 
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.StreamHandler())
-
-    posted_questions = data.read_posted_questions(args.data_file)
-
+    posted_questions = PostedLeetCodeQuestions(args.data_file)
     lc = LeetCode()
-    all_questions = lc.questions_by_id
+    problem = lc.get_random_problem(posted_questions)
 
-
-    bot = StudyBot(args.channel, args.manifest_file, args.template_file)
-    message = bot.get_message_payload()
+    message = {
+            "channel": args.channel,
+            "unfurl_links": False,
+            "unfurl_media": False,
+            "blocks": []
+    }
 
     response = None
     if message is not None:
-        response = slack_utils.post_to_slack(message)
+        response = slack_client.post_to_slack(message)
     else:
         print('Nothing to post...')
 
     print(f"\n\n\nRESPONSE: \n{str(response)}") if response is not None else print('')
+
+    posted_questions.write_posted_questions()
