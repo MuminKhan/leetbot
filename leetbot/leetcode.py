@@ -21,22 +21,24 @@ class LeetCode:
         self.DIFFICULTY_MAPPING = {1: 'easy', 2: 'medium', 3: 'hard'}
 
         self.response = self.__get_leetcode_data(self.LEETCODE_QUES_URL)
-        self.questions_by_id = self.__organize_questions_by_id(self.response)
-        self.questions_by_difficulty = self.__organize_questions_by_difficulty(
-            self.response)
+        self.all_questions = self.__clean_questions(self.response)
+        self.questions_by_id = self.__organize_questions_by_id(self.all_questions)
+        self.questions_by_difficulty = self.__organize_questions_by_difficulty(self.all_questions)
 
-    def __clean_question(self, question):
-        question.update(question["stat"])
-        question.pop('stat')
-        question["difficulty"] = self.DIFFICULTY_MAPPING[q["difficulty"]["level"]]
-        return question
+    def __clean_questions(self, questions):
+        all_questions = []
+        for question in questions["stat_status_pairs"]:
+            question.update(question["stat"])
+            question.pop('stat')
+            question["difficulty"] = self.DIFFICULTY_MAPPING[question["difficulty"]["level"]]
+            all_questions.append(question)
+        
+        return all_questions
 
     def __organize_questions_by_difficulty(self, question_dict: dict) -> dict:
         questions_by_difficulty = DefaultDict(list)
 
-        all_questions = question_dict["stat_status_pairs"]
-        for q in all_questions:
-            q = self.__clean_question(q)
+        for q in question_dict:
             problem = LeetProblem(question_json=q)
             questions_by_difficulty[q["difficulty"]].append(problem)
 
@@ -45,9 +47,7 @@ class LeetCode:
     def __organize_questions_by_id(self, question_dict: dict) -> dict:
         questions_by_id = {}
 
-        all_questions = question_dict["stat_status_pairs"]
-        for q in all_questions:
-            q = self.__clean_question(q)
+        for q in question_dict:
             problem = LeetProblem(question_json=q)
             questions_by_id[q['question_id']] = problem
 
@@ -63,11 +63,12 @@ class LeetCode:
 
         return response
 
-    def get_random_problem(self, ids_to_exclude=set()):
+    def get_random_problem_id(self, ids_to_exclude=set(), filters=None):
         """
         Returns the id of a randomly selected question
         """
         ids_to_exclude = set(ids_to_exclude)
         possible_questions = set(self.questions_by_id.keys()) - ids_to_exclude
-        id = random.choice(possible_questions)
+        id = random.sample(possible_questions, 1)
+
         return id

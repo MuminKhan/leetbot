@@ -10,7 +10,7 @@ class PostedLeetCodeQuestions:
 
     def __read_posted_questions(self) -> dict:
         if not os.path.exists(self.data_file):
-            return {'posted_problem_ids' : []}
+            return {'posted_problem_ids': []}
 
         with open(self.data_file) as f:
             probs = json.loads(f.read())
@@ -24,3 +24,5 @@ class PostedLeetCodeQuestions:
         with open(self.data_file, mode='w') as f:
             json.dump(self.questions, self.data_file)
 
+    def add_posted_question_id(self, question_id):
+        self.questions.append(question_id)
