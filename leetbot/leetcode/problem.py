@@ -22,4 +22,5 @@ class LeetProblem:
     def __init__(self, question_json) -> None:
         self.json = question_json
         for k,v in question_json.items():
-            self.__dict__[k] = v
+            key = k.replace('__', '_')
+            self.__dict__[key] = v

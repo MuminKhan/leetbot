@@ -5,10 +5,10 @@ import random
 import urllib.request
 from typing import DefaultDict
 
-from leetproblem import LeetProblem
+from leetcode.problem import LeetProblem
 
 
-class LeetCode:
+class LeetCodeQuestions:
 
     def __init__(self) -> None:
         self.LEETCODE_BASE_URL = "https://leetcode.com"
@@ -32,7 +32,7 @@ class LeetCode:
             question.pop('stat')
             question["difficulty"] = self.DIFFICULTY_MAPPING[question["difficulty"]["level"]]
             all_questions.append(question)
-        
+
         return all_questions
 
     def __organize_questions_by_difficulty(self, question_dict: dict) -> dict:
@@ -60,7 +60,6 @@ class LeetCode:
 
         request = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'})
         response = json.load(urllib.request.urlopen(request))
-
         return response
 
     def get_random_problem_id(self, ids_to_exclude=set(), filters=None):
@@ -69,6 +68,4 @@ class LeetCode:
         """
         ids_to_exclude = set(ids_to_exclude)
         possible_questions = set(self.questions_by_id.keys()) - ids_to_exclude
-        id = random.sample(possible_questions, 1)
-
-        return id
+        return random.sample(possible_questions, 1)[0]
