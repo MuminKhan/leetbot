@@ -14,7 +14,7 @@ def parse_args():
     #parser.add_argument('--manifest',  '-m', required=True,  dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
     #parser.add_argument('--template',  '-t', required=True,  dest='template_file', action='store', help='Template file location')
     parser.add_argument('--data_file', '-D', required=False, dest='data_file',  action='store', help='Where to read/write posted questions. Default="./leetbot.json"', default='leetbot.json')
-    parser.add_argument('--difficulty','-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default=['easy', 'medium', 'hard'])
+    parser.add_argument('--difficulty','-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default='easy,medium,hard')
 
     args = parser.parse_args()
     args.difficulty = args.difficulty.lower() 
