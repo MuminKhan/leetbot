@@ -5,19 +5,18 @@ import logging
 import slack_client.client
 from leetcode.posted_questions import PostedLeetCodeQuestions
 from leetcode.questions import LeetCodeQuestions
+from leetcode.problem import LeetProblem
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--channel',   '-c', required=True,  dest='channel',       action='store', help='Channel to post to. Bot must be a member to post.')
-    #parser.add_argument('--manifest',  '-m', required=True,  dest='manifest_file', action='store', help='Location of manifest file. Must be a .csv or .json.')
-    #parser.add_argument('--template',  '-t', required=True,  dest='template_file', action='store', help='Template file location')
-    parser.add_argument('--data_file', '-D', required=False, dest='data_file',  action='store', help='Where to read/write posted questions. Default="./leetbot.json"', default='leetbot.json')
-    parser.add_argument('--difficulty','-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default='easy,medium,hard')
+    parser.add_argument('--channel',    '-c', required=True,  dest='channel',    action='store', help='Channel to post to. Bot must be a member to post.')
+    parser.add_argument('--data_file',  '-D', required=False, dest='data_file',  action='store', help='Where to read/write posted questions. Default="./leetbot.json"', default='leetbot.json')
+    parser.add_argument('--difficulty', '-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default='easy,medium,hard')
 
     args = parser.parse_args()
-    args.difficulty = args.difficulty.lower() 
+    args.difficulty = args.difficulty.lower()
 
     print('Args:')
     [print(f'\t{k}: {v}') for k, v in args.__dict__.items()]
@@ -25,24 +24,25 @@ def parse_args():
     return args
 
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
-if __name__ == "__main__":
+def get_question(posted_questions: list) -> LeetProblem:
 
-    args = parse_args()
-
-    posted_questions = PostedLeetCodeQuestions(args.data_file)
-    
     lc = LeetCodeQuestions()
-    problem = id = None 
+    problem = id = None
     while id is None:
         id = lc.get_random_problem_id(set())
         problem = lc.questions_by_id[id]
         if problem.difficulty not in args.difficulty:
             id = None
 
-    body = ""
+    return problem
+
+
+def build_message(question: LeetProblem):
+    desired_fields = ['question_title', 'difficulty', 'question_id', 'url']
+    body = f'**Today\'s LeetCode Question:** {question.question_title.title()}\n'
+    body += f'  Problem ID: {question.question_id}\n'
+    body += f'  Difficulty: {question.difficulty.title()}\n'
+    body += f'  URL: {question.url}\n'
 
     message = {
         "channel": args.channel,
@@ -53,19 +53,30 @@ if __name__ == "__main__":
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": (body),
+                    "text": body,
                 }
             }
         ]
     }
 
-    response = None
-    if message is not None:
-        response = slack_client.client.post_to_slack(message)
-    else:
+    return message
+
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+if __name__ == "__main__":
+
+    args = parse_args()
+    posted_questions = PostedLeetCodeQuestions(args.data_file)
+    problem = get_question(posted_questions)
+    message = build_message(problem)
+
+    if message is None:
         print('Nothing to post...')
+        exit()
 
-    print(f"\n\n\nRESPONSE: \n{str(response)}") if response is not None else print('')
-
-    posted_questions.add_posted_question_id(id)
-    posted_questions.write_posted_questions()
+    response = slack_client.client.post_to_slack(message)
+    if response is not None:
+        posted_questions.add_posted_question_id(problem.question_id)
+        posted_questions.write_posted_questions()

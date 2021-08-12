@@ -3,7 +3,9 @@
 import json
 import random
 import urllib.request
+from urllib.parse import urljoin
 from typing import DefaultDict
+
 
 from leetcode.problem import LeetProblem
 
@@ -13,7 +15,7 @@ class LeetCodeQuestions:
     def __init__(self) -> None:
         self.LEETCODE_BASE_URL = "https://leetcode.com"
         self.LEETCODE_PROB_URL = f"{self.LEETCODE_BASE_URL}/problems"
-        self.LEETCODE_QUES_URL = f"{self.LEETCODE_BASE_URL}/api/problems/all/"
+        self.LEETCODE_QUES_URL = f"{self.LEETCODE_BASE_URL}/api/problems/all"
         self.DESIRED_QUESTION_FIELDS = ['difficulty', 'frequency', 'frontend_question_id', 'paid_only',
                                         'question__article__has_video_solution', 'question__article__live', 'question__article__slug',
                                         'question__hide', 'question__title', 'question__title_slug',
@@ -27,11 +29,15 @@ class LeetCodeQuestions:
 
     def __clean_questions(self, questions):
         all_questions = []
+
         for question in questions["stat_status_pairs"]:
             question.update(question["stat"])
             question.pop('stat')
             question["difficulty"] = self.DIFFICULTY_MAPPING[question["difficulty"]["level"]]
+            question["url"] = f'{self.LEETCODE_PROB_URL}/{question["question__title_slug"]}'
             all_questions.append(question)
+
+        print
 
         return all_questions
 
