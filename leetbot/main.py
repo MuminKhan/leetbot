@@ -11,6 +11,7 @@ from leetcode.problem import LeetProblem
 def parse_args():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('--alert', required=False, dest='alert' , action='store_true')
     parser.add_argument('--channel',    '-c', required=True,  dest='channel',    action='store', help='Channel to post to. Bot must be a member to post.')
     parser.add_argument('--data_file',  '-D', required=False, dest='data_file',  action='store', help='Where to read/write posted questions. Default="./leetbot.json"', default='leetbot.json')
     parser.add_argument('--difficulty', '-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default='easy,medium,hard')
@@ -38,10 +39,10 @@ def get_question(posted_questions: list) -> LeetProblem:
 
 
 def build_message(question: LeetProblem):
-    body = f"*Today's LeetCode Question incoming @channel!*\n"
-    body += f'\tTitle:      {question.question_title.title()}\n'
-    body += f'\tProblem ID: {question.question_id}\n'
-    body += f'\tDifficulty: {question.difficulty.title()}\n'
+    body = f"*Today's LeetCode Question incoming{' @channel' if args.alert else ''}!*\n"
+    body += f'\tName: {question.question_title.title()}\n'
+    body += f'\tID: {question.question_id}\n'
+    body += f'\tLevel: {question.difficulty.title()}\n'
     body += f'\tURL: {question.url}\n'
     message = {
         "channel": args.channel,
