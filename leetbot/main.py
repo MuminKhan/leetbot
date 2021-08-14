@@ -38,15 +38,14 @@ def get_question(posted_questions: list) -> LeetProblem:
 
 
 def build_message(question: LeetProblem):
-    desired_fields = ['question_title', 'difficulty', 'question_id', 'url']
-    body = f'**Today\'s LeetCode Question:** {question.question_title.title()}\n'
-    body += f'  Problem ID: {question.question_id}\n'
-    body += f'  Difficulty: {question.difficulty.title()}\n'
-    body += f'  URL: {question.url}\n'
-
+    body = f"*Today's LeetCode Question incoming @channel!*"
+    body += f'\tTitle:      {question.question_title.title()}\n'
+    body += f'\tProblem ID: {question.question_id}\n'
+    body += f'\tDifficulty: {question.difficulty.title()}\n'
+    body += f'\tURL: {question.url}\n'
     message = {
         "channel": args.channel,
-        "unfurl_links": False,
+        "unfurl_links": True,
         "unfurl_media": False,
         "blocks": [
             {
@@ -58,7 +57,6 @@ def build_message(question: LeetProblem):
             }
         ]
     }
-
     return message
 
 
