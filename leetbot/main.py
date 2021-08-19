@@ -30,9 +30,9 @@ def get_question(posted_questions: list) -> LeetProblem:
     lc = LeetCodeQuestions()
     problem = id = None
     while id is None:
-        id = lc.get_random_problem_id(set())
+        id = lc.get_random_problem_id(posted_questions.questions)
         problem = lc.questions_by_id[id]
-        if problem.difficulty not in args.difficulty:
+        if problem.difficulty not in args.difficulty or problem.paid_only:
             id = None
 
     return problem
