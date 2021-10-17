@@ -11,7 +11,7 @@ from leetcode.problem import LeetProblem
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--alert', required=False, dest='alert' , action='store_true')
+    parser.add_argument('--alert', required=False, dest='alert', action='store_true')
     parser.add_argument('--channel',    '-c', required=True,  dest='channel',    action='store', help='Channel to post to. Bot must be a member to post.')
     parser.add_argument('--data_file',  '-D', required=False, dest='data_file',  action='store', help='Where to read/write posted questions. Default="./leetbot.json"', default='leetbot.json')
     parser.add_argument('--difficulty', '-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default='easy,medium,hard')
@@ -61,12 +61,7 @@ def build_message(question: LeetProblem):
     return message
 
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
-if __name__ == "__main__":
-
-    args = parse_args()
+def main():
     posted_questions = PostedLeetCodeQuestions(args.data_file)
     problem = get_question(posted_questions)
     message = build_message(problem)
@@ -79,3 +74,11 @@ if __name__ == "__main__":
     if response is not None:
         posted_questions.add_posted_question_id(problem.question_id)
         posted_questions.write_posted_questions()
+
+
+if __name__ == "__main__":
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
+    args = parse_args()
+    main()
