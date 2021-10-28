@@ -1,19 +1,25 @@
 import json
-import os
 
 
-class PostedLeetCodeQuestions:
+class QuestionStore:
 
     def __init__(self, data_file) -> None:
-        self.data_file = data_file
-        self.questions = self.__read_posted_questions()
 
-    def __read_posted_questions(self) -> dict:
+        self.data_file = data_file
+        self.posted_questions = None
+        self.requested_questions = None
+
+        q = self.__read_questions_json()
+        self.posted_questions = q['posted_problem_ids']
+        self.requested_questions = q['requested_problem_ids']
+
+    def __read_questions_json(self) -> dict:
         try:
             with open(self.data_file) as f:
                 return json.loads(f.read())
-        except:
-            return {'posted_problem_ids': []}
+        except Exception as e:
+            print(e)
+            return {'posted_problem_ids': [], 'requested_problem_ids': []}
 
     def write_posted_questions(self, data_file=None):
         if data_file is None:

@@ -3,8 +3,8 @@
 import json
 import random
 import urllib.request
-from urllib.parse import urljoin
 from typing import DefaultDict
+from leetcode.question_store import QuestionStore
 
 
 from leetcode.problem import LeetProblem
@@ -68,10 +68,18 @@ class LeetCodeQuestions:
         response = json.load(urllib.request.urlopen(request))
         return response
 
-    def get_random_problem_id(self, ids_to_exclude=set(), filters=None):
+
+    def get_problem_id(self, question_store:QuestionStore=None):
         """
-        Returns the id of a randomly selected question
+        Returns the id of a selected question
         """
-        ids_to_exclude = set(ids_to_exclude)
-        possible_questions = set(self.questions_by_id.keys()) - ids_to_exclude
-        return random.sample(possible_questions, 1)[0]
+        ids_to_exclude = set(question_store.posted_questions)
+        possible_questions = [id for id in question_store.requested_questions if id not in ids_to_exclude]
+        
+        if len(possible_questions) == 0:
+            possible_questions = set(self.questions_by_id.keys()) - ids_to_exclude
+            id = random.sample(possible_questions, 1)[0]
+        else:
+            id = possible_questions[0]
+
+        return id
