@@ -40,7 +40,7 @@ def get_question(questions: dict) -> LeetProblem:
 
 def build_message(question: LeetProblem):
     body = f"*Today's LeetCode Question incoming{' @channel' if args.alert else ''}!*\n"
-    body += f'\tName: {question.question_title.title()}\n'
+    body += f'\tName: {question.question_title}\n'
     body += f'\tID: {question.question_id}\n'
     body += f'\tLevel: {question.difficulty.title()}\n'
     body += f'\tURL: {question.url}\n'

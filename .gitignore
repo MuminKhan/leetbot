@@ -141,3 +141,5 @@ cython_debug/
 misc/
 .vscode/settings.json
 leetbot.json
+test.sh
+run.sh
