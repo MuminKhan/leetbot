@@ -36,4 +36,8 @@ class QuestionStore:
 
     def add_posted_question_id(self, question_id):
         self.posted_questions.append(question_id)
-        self.requested_questions.remove(question_id)
+
+        try:
+            self.requested_questions.remove(question_id)
+        except ValueError as e:
+            pass
