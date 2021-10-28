@@ -1,4 +1,5 @@
 import json
+from logging import Logger
 
 
 class QuestionStore:
@@ -18,7 +19,6 @@ class QuestionStore:
             with open(self.data_file) as f:
                 return json.loads(f.read())
         except Exception as e:
-            print(e)
             return {'posted_problem_ids': [], 'requested_problem_ids': []}
 
     def write_posted_questions(self, data_file=None):

@@ -37,8 +37,6 @@ class LeetCodeQuestions:
             question["url"] = f'{self.LEETCODE_PROB_URL}/{question["question__title_slug"]}'
             all_questions.append(question)
 
-        print
-
         return all_questions
 
     def __organize_questions_by_difficulty(self, question_dict: dict) -> dict:

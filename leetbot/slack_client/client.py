@@ -13,7 +13,6 @@ def post_to_slack(message):
     try:
         response = slack_web_client.chat_postMessage(**message)
     except SlackApiError as e:
-        print(f'Request to Slack API Failed: {e.response.status_code}.')
-        print(e.response)
+        response = f'Request to Slack API Failed: {e.response.status_code}.'
 
     return response
