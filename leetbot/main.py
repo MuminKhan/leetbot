@@ -3,7 +3,7 @@ import argparse
 import logging
 
 import slack_client.client
-from leetcode.posted_questions import PostedLeetCodeQuestions
+from leetcode.question_store import QuestionStore
 from leetcode.questions import LeetCodeQuestions
 from leetcode.problem import LeetProblem
 
@@ -25,12 +25,12 @@ def parse_args():
     return args
 
 
-def get_question(posted_questions: list) -> LeetProblem:
+def get_question(questions: dict) -> LeetProblem:
 
     lc = LeetCodeQuestions()
     problem = id = None
     while id is None:
-        id = lc.get_random_problem_id(posted_questions.questions)
+        id = lc.get_problem_id(questions)
         problem = lc.questions_by_id[id]
         if problem.difficulty not in args.difficulty or problem.paid_only:
             id = None
@@ -62,8 +62,8 @@ def build_message(question: LeetProblem):
 
 
 def main():
-    posted_questions = PostedLeetCodeQuestions(args.data_file)
-    problem = get_question(posted_questions)
+    questions_store = QuestionStore(args.data_file)
+    problem = get_question(questions_store)
     message = build_message(problem)
 
     if message is None:
@@ -72,8 +72,8 @@ def main():
 
     response = slack_client.client.post_to_slack(message)
     if response is not None:
-        posted_questions.add_posted_question_id(problem.question_id)
-        posted_questions.write_posted_questions()
+        questions_store.add_posted_question_id(problem.question_id)
+        questions_store.write_posted_questions()
 
 
 if __name__ == "__main__":
