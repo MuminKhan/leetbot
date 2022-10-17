@@ -39,6 +39,7 @@ def get_question(questions: dict) -> LeetProblem:
 
 
 def build_message(question: LeetProblem):
+    text = f'New LeetCode Question posted in #{args.channel}!'
     body = f"*Today's LeetCode Question incoming{' @channel' if args.alert else ''}!*\n"
     body += f'\tName: {question.question_title}\n'
     body += f'\tID: {question.question_id}\n'
@@ -48,6 +49,7 @@ def build_message(question: LeetProblem):
         "channel": args.channel,
         "unfurl_links": True,
         "unfurl_media": False,
+        "text": text,
         "blocks": [
             {
                 "type": "section",
