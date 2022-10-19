@@ -29,6 +29,7 @@ This is a simple SlackBot that posts a daily LeetCode question via Slack.
     socket_mode_enabled: false
     token_rotation_enabled: false
     ```
-5. Press `Install tto Workspace` to generate the key
+5. Press `Install to Workspace` to generate the key
 6. Invite the bot to the channel you wish to post in
 7. Configure and deploy the bot against the channel
+8. Consider cron-ing the service to run at desired interval
