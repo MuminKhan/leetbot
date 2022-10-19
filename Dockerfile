@@ -1,8 +1,11 @@
-FROM python:3.8-alpine
-WORKDIR /src
+FROM python:3.9
+
+WORKDIR /app
 COPY requirements.txt .
+COPY ./leetbot .
+
 RUN pip install -r requirements.txt
-COPY ./leetbot /src
+
 EXPOSE 5000
-CMD python leetbot/main.py
+CMD ["python", "leetbot/main.py"]
  
