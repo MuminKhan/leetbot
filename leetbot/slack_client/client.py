@@ -1,10 +1,10 @@
 import os
 
+import config
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-
-slack_web_client = WebClient(token=os.environ.get("ALGOBOT_SLACK_TOKEN"))
+slack_web_client = WebClient(token=os.environ.get(config.ENV))
 
 
 def post_to_slack(message):

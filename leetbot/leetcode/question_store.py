@@ -16,8 +16,8 @@ class QuestionStore:
         self._requested_questions_key = 'requested_problem_ids'
         
         q = self.__read_questions_json(data_file=data_file)
-        self.posted_questions    = q.get(self._posted_questions_key, [])   
-        self.requested_questions = q.get(self._requested_questions_key, [])
+        self.posted_questions: list    = q.get(self._posted_questions_key, [])   
+        self.requested_questions: list = q.get(self._requested_questions_key, [])
 
     def __read_questions_json(self, data_file) -> dict:
         try:
@@ -49,5 +49,5 @@ class QuestionStore:
 
         try:
             self.requested_questions.remove(question_id)
-        except ValueError as e:
+        except ValueError:
             pass
