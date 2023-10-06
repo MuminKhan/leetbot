@@ -19,7 +19,7 @@ class LeetProblem:
         self.tags: str
         self.json: dict
 
-    def __init__(self, question_json) -> None:
+    def __init__(self, question_json: dict) -> None:
         self.json = question_json
         for k,v in question_json.items():
             key = k.replace('__', '_')

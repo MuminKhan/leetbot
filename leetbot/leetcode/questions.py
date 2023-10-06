@@ -27,7 +27,7 @@ class LeetCodeQuestions:
         self.questions_by_id = self.__organize_questions_by_id(self.all_questions)
         self.questions_by_difficulty = self.__organize_questions_by_difficulty(self.all_questions)
 
-    def __clean_questions(self, questions):
+    def __clean_questions(self, questions: dict):
         all_questions = []
 
         for question in questions["stat_status_pairs"]:
