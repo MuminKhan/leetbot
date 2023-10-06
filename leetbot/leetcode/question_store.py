@@ -4,7 +4,12 @@ from logging import Logger
 
 class QuestionStore:
 
-    def __init__(self, data_file) -> None:
+    def __init__(self, data_file: str) -> None:
+        """Constructs the QuestionStore
+
+        Args:
+            data_file (str): Path to json datafile
+        """
 
         self.data_file = data_file
         self._posted_questions_key = 'posted_problem_ids'
@@ -22,6 +27,11 @@ class QuestionStore:
             return {self._posted_questions_key: [], self._requested_questions_key: []}
 
     def as_dict(self) -> dict:
+        """Returns the QuestionStore as a dict
+
+        Returns:
+            dict: QuestionStore as {posted_problem_ids: [ids], requested_problem_ids: [ids]}
+        """
         return {
             self._posted_questions_key:     self.posted_questions, 
             self._requested_questions_key:  self.requested_questions, 
