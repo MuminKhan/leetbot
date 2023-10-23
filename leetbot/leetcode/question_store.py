@@ -10,7 +10,6 @@ class QuestionStore:
         Args:
             data_file (str): Path to json datafile
         """
-
         self.data_file = data_file
         self._posted_questions_key = 'posted_problem_ids'
         self._requested_questions_key = 'requested_problem_ids'
@@ -46,7 +45,6 @@ class QuestionStore:
 
     def add_posted_question_id(self, question_id):
         self.posted_questions.append(question_id)
-
         try:
             self.requested_questions.remove(question_id)
         except ValueError:
