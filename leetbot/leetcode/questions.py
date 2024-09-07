@@ -3,7 +3,7 @@
 import json
 import random
 import urllib.request
-from enum import Enum, auto
+from enum import Enum
 from typing import DefaultDict
 
 from leetcode.problem import LeetProblem
