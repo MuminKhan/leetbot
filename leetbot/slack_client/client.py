@@ -4,7 +4,7 @@ import config
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-slack_web_client = WebClient(token=os.environ.get(config.ENV))
+slack_web_client = WebClient(token=os.environ.get(config.ENV_VARIABLE_NAME))
 
 
 def post_to_slack(message):

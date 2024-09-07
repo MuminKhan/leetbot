@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Leetbot (local)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/leetbot/leetbot.py",
+            "args": ["--channel", "slack-dev"],
+            "console": "integratedTerminal"
+        }
+    ]
+}

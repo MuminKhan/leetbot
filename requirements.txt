@@ -1,1 +1,1 @@
-slack-sdk==3.23.0
+slack-sdk==3.31.0

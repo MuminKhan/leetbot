@@ -138,8 +138,7 @@ dmypy.json
 cython_debug/
 
 # ignore 
-misc/
-.vscode/settings.json
 leetbot.json
-test.sh
+misc/
 run.sh
+test.sh

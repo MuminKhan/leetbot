@@ -1,4 +1,3 @@
-
 import argparse
 import logging
 
@@ -11,16 +10,42 @@ from leetcode.problem import LeetProblem
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--alert', required=False, dest='alert', action='store_true')
-    parser.add_argument('--channel',    '-c', required=True,  dest='channel',    action='store', help='Channel to post to. Bot must be a member to post.')
-    parser.add_argument('--data_file',  '-D', required=False, dest='data_file',  action='store', help='Where to read/write posted questions. Default="./leetbot.json"', default='leetbot.json')
-    parser.add_argument('--difficulty', '-d', required=False, dest='difficulty', action='store', help='List of any combination of [easy, medium, hard]', type=str, default='easy,medium,hard')
+    parser.add_argument(
+        "--channel",
+        "-c",
+        required=True,
+        dest="channel",
+        action="store",
+        help="Channel to post to. Bot must be a member to post.",
+    )
+    parser.add_argument(
+        "--alert", required=False, dest="alert", action="store_true", help="Whether or not to send an @here alert."
+    )
+    parser.add_argument(
+        "--data_file",
+        "-D",
+        required=False,
+        dest="data_file",
+        action="store",
+        help='Where to read/write posted questions. Default="./leetbot.json"',
+        default="leetbot.json",
+    )
+    parser.add_argument(
+        "--difficulty",
+        "-d",
+        required=False,
+        dest="difficulty",
+        action="store",
+        help="List of any combination of [easy, medium, hard]",
+        type=str,
+        default="easy,medium,hard",
+    )
 
     args = parser.parse_args()
     args.difficulty = args.difficulty.lower()
 
-    print('Args:')
-    [print(f'\t{k}: {v}') for k, v in args.__dict__.items()]
+    print("Args:")
+    [print(f"\t{k}: {v}") for k, v in args.__dict__.items()]
 
     return args
 
@@ -28,23 +53,23 @@ def parse_args():
 def get_question(questions: dict) -> LeetProblem:
 
     lc = LeetCodeQuestions()
-    problem = id = None
-    while id is None:
-        id = lc.get_problem_id(questions)
-        problem = lc.questions_by_id[id]
-        if problem.difficulty not in args.difficulty or problem.paid_only:
-            id = None
+    problem = problem_id = None
+    while problem_id is None:
+        problem_id = lc.get_problem_id(questions)
+        problem = lc.questions_by_id[problem_id]
+        if problem.difficulty.name not in args.difficulty or problem.paid_only:
+            problem_id = None
 
     return problem
 
 
 def build_message(question: LeetProblem):
-    text = f'New LeetCode Question posted in #{args.channel}!'
+    text = f"New LeetCode Question posted in #{args.channel}!"
     body = f"*Today's LeetCode Question incoming{' @channel' if args.alert else ''}!*\n"
-    body += f'\tName: {question.question_title}\n'
-    body += f'\tID: {question.question_id}\n'
-    body += f'\tLevel: {question.difficulty.title()}\n'
-    body += f'\tURL: {question.url}\n'
+    body += f"\tName: {question.question_title}\n"
+    body += f"\tID: {question.question_id}\n"
+    body += f"\tLevel: {question.difficulty.name}\n"
+    body += f"\tURL: {question.url}\n"
     message = {
         "channel": args.channel,
         "unfurl_links": True,
@@ -56,9 +81,9 @@ def build_message(question: LeetProblem):
                 "text": {
                     "type": "mrkdwn",
                     "text": body,
-                }
+                },
             }
-        ]
+        ],
     }
     return message
 
@@ -69,7 +94,7 @@ def main():
     message = build_message(problem)
 
     if message is None:
-        print('Nothing to post...')
+        print("Nothing to post...")
         exit()
 
     response = slack_client.client.post_to_slack(message)
