@@ -20,7 +20,7 @@ class QuestionStore:
         try:
             with open(data_file) as f:
                 return json.loads(f.read())
-        except Exception as e:
+        except Exception:
             return {self._posted_questions_key: [], self._requested_questions_key: []}
 
     def as_dict(self) -> dict:

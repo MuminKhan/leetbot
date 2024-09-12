@@ -14,5 +14,8 @@
     "pylint.args": [
         "--line-length",
         "120"
-    ]
+    ],
+    "files.exclude": {
+        ".aws-sam": true,
+    }
 }

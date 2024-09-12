@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM Template for a Lambda function triggered by cron and interacting with S3.
+
+Parameters:
+  LeetbotSlackToken:
+    Type: String
+    Description: "Slack token for the Leetbot app"
+  AppDataJsonPath:
+    Type: String
+    Description: "Path to the app data JSON file in the S3 bucket"
+  
+
+Resources:
+  LeetbotLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: leetbot.handler
+      Runtime: python3.12
+      CodeUri: .
+      Timeout: 120
+      MemorySize: 128
+      Environment:
+        Variables:
+          LEETBOT_IS_LOCAL_DEPLOYMENT: "false"
+          LEETBOT_JSON_PATH: !Ref AppDataJsonPath
+          LEETBOT_S3_BUCKET_NAME: !Ref LeetbotBucket
+          LEETBOT_SLACK_TOKEN: !Ref LeetbotSlackToken
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref LeetbotBucket
+        - S3WritePolicy:
+            BucketName: !Ref LeetbotBucket
+      Events:
+        MyScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 16 * * ? *)  # Every day at noon PT (adjusted to UTC)
+
+  LeetbotBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "leetbot-bucket"
+
+Outputs:
+  LambdaFunctionArn:
+    Description: "ARN of the Lambda function"
+    Value: !GetAtt LeetbotLambda.Arn
+
+  S3BucketName:
+    Description: "Name of the S3 bucket"
+    Value: !Ref LeetbotBucket
