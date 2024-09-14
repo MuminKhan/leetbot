@@ -6,10 +6,21 @@ slack_web_client = WebClient(token=config.slack_token)
 
 
 def post_to_slack(message):
-    response = None
+    response: dict = None
     try:
-        response = slack_web_client.chat_postMessage(**message)
+        slack_response = slack_web_client.chat_postMessage(**message)
+        response = {
+            "status": "success",
+            "status_code": slack_response.status_code,
+            "data": slack_response.data,
+            "message": "Message posted successfully.",
+        }
     except SlackApiError as e:
-        response = f"Request to Slack API Failed: {e.response.status_code}."
+        response = {
+            "status": "error",
+            "status_code": e.response.status_code,
+            "data": e.response.data,
+            "message": e.args[0],
+        }
 
     return response

@@ -28,6 +28,7 @@ Resources:
       CodeUri: ./leetbot/
       Timeout: 120
       MemorySize: 128
+      ReservedConcurrentExecutions: 1
       Environment:
         Variables:
           LEETBOT_CHANNEL: !Ref LeetbotSlackChannel
@@ -41,10 +42,15 @@ Resources:
         - S3WritePolicy:
             BucketName: !Ref LeetbotBucket
       Events:
-        MyScheduledEvent:
-          Type: Schedule
+        LeetbotCron:
+          Type: ScheduleV2
           Properties:
-            Schedule: cron(0 16 * * ? *) # Every day at noon PT (adjusted to UTC)
+            Description: "Leetbot cron job"
+            RetryPolicy:
+              MaximumRetryAttempts: 0
+              MaximumEventAgeInSeconds: 60
+            ScheduleExpressionTimezone: UTC
+            ScheduleExpression: cron(0 17 * * ? *) # Every day at noon PT (adjusted to UTC)
 
   LeetbotBucket:
     Type: AWS::S3::Bucket

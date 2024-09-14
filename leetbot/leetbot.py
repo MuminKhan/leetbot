@@ -77,10 +77,11 @@ def handler(event, context):
 
     logging.info(f"Posting to Slack: {message}")
     response = slack_client.client.post_to_slack(message)
-    if response is not None:
+    if response["status"] == "success":
         questions_store.add_posted_question_id(problem.question_id)
         questions_store.write_posted_questions()
 
+    logging.info(f"Response: {response}")
     logging.info("Leetbot finished.")
     return response
 
