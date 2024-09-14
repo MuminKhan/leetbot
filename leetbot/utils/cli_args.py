@@ -13,7 +13,7 @@ def parse_args():
         help="Channel to post to. Bot must be a member to post.",
     )
     parser.add_argument(
-        "--alert", required=False, dest="alert", action="store_true", help="Whether or not to send an @here alert."
+        "--alert", required=False, dest="alert", action="store_true", help="Whether or not to send an @channel alert."
     )
     parser.add_argument(
         "--data_file",

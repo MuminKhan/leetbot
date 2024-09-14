@@ -1,10 +1,8 @@
-import os
-
-import config
+from utils.config import config
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-slack_web_client = WebClient(token=os.environ.get(config.ENV_VARIABLE_NAME))
+slack_web_client = WebClient(token=config.slack_token)
 
 
 def post_to_slack(message):
@@ -12,6 +10,6 @@ def post_to_slack(message):
     try:
         response = slack_web_client.chat_postMessage(**message)
     except SlackApiError as e:
-        response = f'Request to Slack API Failed: {e.response.status_code}.'
+        response = f"Request to Slack API Failed: {e.response.status_code}."
 
     return response
