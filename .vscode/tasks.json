@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "SAM build/deploy application",
+            "type": "shell",
+            "command": "sam build && sam deploy",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [],
+            "detail": "Build the AWS SAM application"
+        },
+    ]
+}

@@ -7,9 +7,6 @@
             "program": "${workspaceFolder}/leetbot/leetbot.py",
             "args": ["--channel", "slack-dev"],
             "console": "integratedTerminal",
-            "env": {
-                "LEETBOT_SLACK_TOKEN": ""
-            }
-        }
+        },
     ]
 }

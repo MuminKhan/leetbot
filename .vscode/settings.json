@@ -1,7 +1,7 @@
 {
     "[python]": {
         "diffEditor.ignoreTrimWhitespace": false,
-        "editor.formatOnType": true,
+        "editor.formatOnSave": true,
         "editor.wordBasedSuggestions": "off",
         "gitlens.codeLens.symbolScopes": [
             "!Module"
@@ -14,5 +14,8 @@
     "pylint.args": [
         "--line-length",
         "120"
-    ]
+    ],
+    "files.exclude": {
+        ".aws-sam": true,
+    }
 }

@@ -143,3 +143,7 @@ leetbot.json
 misc/
 run.sh
 test.sh
+
+# AWS SAM
+samconfig.toml
+.aws-sam/

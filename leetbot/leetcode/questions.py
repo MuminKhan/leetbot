@@ -19,7 +19,7 @@ class QuestionDifficulty(Enum):
 class LeetCodeQuestions:
     LEETCODE_BASE_URL = "https://leetcode.com"
     LEETCODE_PROB_URL = f"{LEETCODE_BASE_URL}/problems"
-    LEETCODE_QUES_URL = f"{LEETCODE_BASE_URL}/api/problems/all"
+    LEETCODE_ALL_PROBLEMS_URL = f"{LEETCODE_BASE_URL}/api/problems/all"
     DESIRED_QUESTION_FIELDS = [
         "difficulty",
         "frequency",
@@ -39,7 +39,7 @@ class LeetCodeQuestions:
 
     def __init__(self) -> None:
 
-        self.response = self.__get_leetcode_data(LeetCodeQuestions.LEETCODE_QUES_URL)
+        self.response = self.__get_leetcode_data(LeetCodeQuestions.LEETCODE_ALL_PROBLEMS_URL)
         self.all_questions = self.__clean_questions(self.response)
         self.questions_by_id = self.__organize_questions_by_id(self.all_questions)
         self.questions_by_difficulty = self.__organize_questions_by_difficulty(self.all_questions)
@@ -77,7 +77,7 @@ class LeetCodeQuestions:
     def __get_leetcode_data(self, url=None) -> dict:
 
         if url is None:
-            url = LeetCodeQuestions.LEETCODE_QUES_URL
+            url = LeetCodeQuestions.LEETCODE_ALL_PROBLEMS_URL
 
         request = urllib.request.Request(
             url,
@@ -88,7 +88,7 @@ class LeetCodeQuestions:
         response = json.load(urllib.request.urlopen(request))
         return response
 
-    def get_problem_id(self, question_store: QuestionStore = None):
+    def get_problem_id(self, question_store):
         """
         Returns the id of a selected question
         """

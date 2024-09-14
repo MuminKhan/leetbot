@@ -1,53 +1,13 @@
-import argparse
 import logging
 
 import slack_client.client
+from leetcode.problem import LeetProblem
 from leetcode.question_store import QuestionStore
 from leetcode.questions import LeetCodeQuestions
-from leetcode.problem import LeetProblem
+from utils.cli_args import parse_args
+from utils.config import config
 
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--channel",
-        "-c",
-        required=True,
-        dest="channel",
-        action="store",
-        help="Channel to post to. Bot must be a member to post.",
-    )
-    parser.add_argument(
-        "--alert", required=False, dest="alert", action="store_true", help="Whether or not to send an @here alert."
-    )
-    parser.add_argument(
-        "--data_file",
-        "-D",
-        required=False,
-        dest="data_file",
-        action="store",
-        help='Where to read/write posted questions. Default="./leetbot.json"',
-        default="leetbot.json",
-    )
-    parser.add_argument(
-        "--difficulty",
-        "-d",
-        required=False,
-        dest="difficulty",
-        action="store",
-        help="List of any combination of [easy, medium, hard]",
-        type=str,
-        default="easy,medium,hard",
-    )
-
-    args = parser.parse_args()
-    args.difficulty = args.difficulty.lower()
-
-    print("Args:")
-    [print(f"\t{k}: {v}") for k, v in args.__dict__.items()]
-
-    return args
+logging.getLogger().setLevel(logging.INFO)
 
 
 def get_question(questions: dict) -> LeetProblem:
@@ -57,21 +17,21 @@ def get_question(questions: dict) -> LeetProblem:
     while problem_id is None:
         problem_id = lc.get_problem_id(questions)
         problem = lc.questions_by_id[problem_id]
-        if problem.difficulty.name not in args.difficulty or problem.paid_only:
+        if problem.difficulty.name not in config.difficulty or problem.paid_only:
             problem_id = None
 
     return problem
 
 
 def build_message(question: LeetProblem):
-    text = f"New LeetCode Question posted in #{args.channel}!"
-    body = f"*Today's LeetCode Question incoming{' @channel' if args.alert else ''}!*\n"
+    text = f"New LeetCode Question posted in #{config.channel}!"
+    body = f"*Today's LeetCode Question incoming{' @channel' if config.alert else ''}!*\n"
     body += f"\tName: {question.question_title}\n"
     body += f"\tID: {question.question_id}\n"
     body += f"\tLevel: {question.difficulty.name}\n"
     body += f"\tURL: {question.url}\n"
     message = {
-        "channel": args.channel,
+        "channel": config.channel,
         "unfurl_links": True,
         "unfurl_media": False,
         "text": text,
@@ -88,24 +48,42 @@ def build_message(question: LeetProblem):
     return message
 
 
-def main():
-    questions_store = QuestionStore(args.data_file)
+def cli_handler():
+    logging.info("Starting Leetbot from CLI.")
+    logging.info("Parsing CLI args.")
+    args = parse_args()
+    config.channel = args.channel if args.channel else config.channel
+    config.difficulty = args.difficulty if args.difficulty else config.difficulty
+    config.alert = args.alert if args.alert else config.alert
+    config.data_file = args.data_file if args.data_file else config.data_file
+
+    return handler(None, None)
+
+
+def handler(event, context):
+    logging.info("Starting Leetbot from Lambda.")
+    logging.info(event)
+    logging.info(context)
+    logging.info(str(config))
+
+    logging.info("Reading questions store.")
+    questions_store = QuestionStore(config.data_file)
+
+    logging.info("Getting question.")
     problem = get_question(questions_store)
+
+    logging.info(f"Posting question: {problem.question_id}")
     message = build_message(problem)
 
-    if message is None:
-        print("Nothing to post...")
-        exit()
-
+    logging.info(f"Posting to Slack: {message}")
     response = slack_client.client.post_to_slack(message)
     if response is not None:
         questions_store.add_posted_question_id(problem.question_id)
         questions_store.write_posted_questions()
 
+    logging.info("Leetbot finished.")
+    return response
+
 
 if __name__ == "__main__":
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.StreamHandler())
-    args = parse_args()
-    main()
+    cli_handler()
