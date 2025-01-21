@@ -22,6 +22,12 @@ class QuestionStore:
     def __is_s3_path(self, data_file_path: str) -> bool:
         return data_file_path.startswith("s3://")
 
+    def __new_question_dict(self) -> dict:
+        return {
+            self._requested_questions_key: [],
+            self._posted_questions_key: [],
+        }
+
     def __read_questions_json(self, data_file_path: str) -> dict:
         if self.__is_s3_path(data_file_path):
             s3_prefix_len = len("s3://")
@@ -32,7 +38,7 @@ class QuestionStore:
             try:
                 s3.head_object(Bucket=bucket, Key=key)
             except Exception:
-                return {self._posted_questions_key: [], self._requested_questions_key: []}
+                return self.__new_question_dict()
 
             obj = s3.get_object(Bucket=bucket, Key=key)
             return json.loads(obj["Body"].read().decode("utf-8"))
@@ -41,7 +47,7 @@ class QuestionStore:
             with open(data_file_path) as f:
                 return json.loads(f.read())
         except Exception:
-            return {self._posted_questions_key: [], self._requested_questions_key: []}
+            return self.__new_question_dict()
 
     def as_dict(self) -> dict:
         """Returns the QuestionStore as a dict

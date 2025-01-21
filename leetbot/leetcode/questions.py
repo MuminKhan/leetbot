@@ -6,8 +6,8 @@ import urllib.request
 from enum import Enum
 from typing import DefaultDict
 
-from leetcode.problem import LeetProblem
 from leetcode.question_store import QuestionStore
+from leetcode.problem import LeetProblem
 
 
 class QuestionDifficulty(Enum):
@@ -43,6 +43,7 @@ class LeetCodeQuestions:
         self.all_questions = self.__clean_questions(self.response)
         self.questions_by_id = self.__organize_questions_by_id(self.all_questions)
         self.questions_by_difficulty = self.__organize_questions_by_difficulty(self.all_questions)
+        self.__returned_question_ids = set()
 
     def __clean_questions(self, questions: dict):
         all_questions = []
@@ -88,12 +89,18 @@ class LeetCodeQuestions:
         response = json.load(urllib.request.urlopen(request))
         return response
 
-    def get_problem_id(self, question_store):
+    def get_problem_id(self, question_store: QuestionStore):
         """
         Returns the id of a selected question
+
+        TODO: This sucks. Optimize later.
         """
         ids_to_exclude = set(question_store.posted_questions)
-        possible_questions = [id for id in question_store.requested_questions if id not in ids_to_exclude]
+        possible_questions = [
+            id
+            for id in question_store.requested_questions
+            if id not in ids_to_exclude and id not in self.__returned_question_ids
+        ]
 
         if len(possible_questions) == 0:
             possible_questions = list(set(self.questions_by_id.keys()) - ids_to_exclude)
@@ -101,4 +108,5 @@ class LeetCodeQuestions:
         else:
             problem_id = possible_questions[0]
 
+        self.__returned_question_ids.add(problem_id)
         return problem_id

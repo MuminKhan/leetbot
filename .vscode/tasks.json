@@ -4,13 +4,13 @@
         {
             "label": "SAM build/deploy application",
             "type": "shell",
-            "command": "sam build && sam deploy",
+            "command": "sam build && sam deploy --no-confirm-changeset",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "problemMatcher": [],
-            "detail": "Build the AWS SAM application"
+            "detail": "Ship it!"
         },
     ]
 }

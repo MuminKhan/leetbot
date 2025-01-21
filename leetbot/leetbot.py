@@ -10,26 +10,30 @@ from utils.config import config
 logging.getLogger().setLevel(logging.INFO)
 
 
-def get_question(questions: dict) -> LeetProblem:
-
+def get_questions(questions: dict) -> LeetProblem:
     lc = LeetCodeQuestions()
-    problem = problem_id = None
-    while problem_id is None:
+    problems = []
+
+    while len(problems) < config.quantity:
         problem_id = lc.get_problem_id(questions)
         problem = lc.questions_by_id[problem_id]
         if problem.difficulty.name not in config.difficulty or problem.paid_only:
-            problem_id = None
+            continue
+        problems.append(problem)
 
-    return problem
+    return problems
 
 
-def build_message(question: LeetProblem):
+def build_message(questions: list[LeetProblem]):
     text = f"New LeetCode Question posted in #{config.channel}!"
-    body = f"*Today's LeetCode Question incoming{' @channel' if config.alert else ''}!*\n"
-    body += f"\tName: {question.question_title}\n"
-    body += f"\tID: {question.question_id}\n"
-    body += f"\tLevel: {question.difficulty.name}\n"
-    body += f"\tURL: {question.url}\n"
+    body = f"*Today's LeetCode Questions incoming{' @channel' if config.alert else ''}!*\n"
+
+    for question in questions:
+        body += f"Name: {question.question_title}\n"
+        body += f"\tID: {question.question_id}\n"
+        body += f"\tLevel: {question.difficulty.name}\n"
+        body += f"\tURL: {question.url}\n"
+
     message = {
         "channel": config.channel,
         "unfurl_links": True,
@@ -69,16 +73,17 @@ def handler(event, context):
     logging.info("Reading questions store.")
     questions_store = QuestionStore(config.data_file)
 
-    logging.info("Getting question.")
-    problem = get_question(questions_store)
+    logging.info("Getting questions.")
+    problems = get_questions(questions_store)
 
-    logging.info(f"Posting question: {problem.question_id}")
-    message = build_message(problem)
+    logging.info(f"Posting questions: {", ".join([str(p.question_id) for p in problems])}")
+    message = build_message(problems)
 
     logging.info(f"Posting to Slack: {message}")
     response = slack_client.client.post_to_slack(message)
     if response["status"] == "success":
-        questions_store.add_posted_question_id(problem.question_id)
+        for problem in problems:
+            questions_store.add_posted_question_id(problem.question_id)
         questions_store.write_posted_questions()
 
     logging.info(f"Response: {response}")

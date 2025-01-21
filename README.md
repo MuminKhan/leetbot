@@ -3,7 +3,7 @@
 ## About
 This is a simple SlackBot that posts a daily LeetCode question via Slack. 
 
-## Setup
+## Deploy
 1. Head to api.slack.com to create a new OAuth key
 2. Press the `Create New App` button
 3. Choose `From Manifest` 

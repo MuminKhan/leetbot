@@ -18,6 +18,9 @@ Parameters:
   LeetbotQuestionDifficulty:
     Type: String
     Description: "Difficulty level of Leetbot questions, any combination of easy, medium, hard."
+  LeetbotQuestionQuantity:
+    Type: Number
+    Description: "Number of questions to post"
 
 Resources:
   LeetbotLambda:
@@ -34,6 +37,7 @@ Resources:
           LEETBOT_CHANNEL: !Ref LeetbotSlackChannel
           LEETBOT_JSON_PATH: !Sub "s3://${LeetbotBucket}/${AppDataJsonPath}"
           LEETBOT_QUESTION_DIFFICULTY: !Ref LeetbotQuestionDifficulty
+          LEETBOT_QUESTION_QUANTITY: !Ref LeetbotQuestionQuantity
           LEETBOT_SEND_CHANNEL_ALERT: !Ref LeetbotSlackAlertsEnabled
           LEETBOT_SLACK_TOKEN: !Ref LeetbotSlackToken
       Policies:
@@ -50,7 +54,7 @@ Resources:
               MaximumRetryAttempts: 0
               MaximumEventAgeInSeconds: 60
             ScheduleExpressionTimezone: UTC
-            ScheduleExpression: cron(0 17 * * ? *) # Every day at noon PT (adjusted to UTC)
+            ScheduleExpression: cron(0 17 ? * MON-FRI *) # Every day at noon PT (adjusted to UTC)
 
   LeetbotBucket:
     Type: AWS::S3::Bucket
