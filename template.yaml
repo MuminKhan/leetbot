@@ -21,6 +21,12 @@ Parameters:
   LeetbotQuestionQuantity:
     Type: Number
     Description: "Number of questions to post"
+  LeetbotMeetingTime:
+    Type: String
+    Description: "Time of the daily Leetbot meeting in specified timezone. Ex: 12:00 PT"
+  LeetbotMeetingLink:
+    Type: String
+    Description: "Link to the Leetbot zoom meeting"
 
 Resources:
   LeetbotLambda:
@@ -40,6 +46,8 @@ Resources:
           LEETBOT_QUESTION_QUANTITY: !Ref LeetbotQuestionQuantity
           LEETBOT_SEND_CHANNEL_ALERT: !Ref LeetbotSlackAlertsEnabled
           LEETBOT_SLACK_TOKEN: !Ref LeetbotSlackToken
+          LEETBOT_MEETING_TIME: !Ref LeetbotMeetingTime
+          LEETBOT_MEETING_LINK: !Ref LeetbotMeetingLink
       Policies:
         - S3ReadPolicy:
             BucketName: !Ref LeetbotBucket
@@ -54,7 +62,7 @@ Resources:
               MaximumRetryAttempts: 0
               MaximumEventAgeInSeconds: 60
             ScheduleExpressionTimezone: UTC
-            ScheduleExpression: cron(0 17 ? * MON-FRI *) # Every day at noon PT (adjusted to UTC)
+            ScheduleExpression: cron(0 17 ? * MON-FRI *)
 
   LeetbotBucket:
     Type: AWS::S3::Bucket

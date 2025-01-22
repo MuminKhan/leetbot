@@ -34,6 +34,9 @@ def build_message(questions: list[LeetProblem]):
         body += f"\tLevel: {question.difficulty.name}\n"
         body += f"\tURL: {question.url}\n"
 
+    if config.meeting_time and config.meeting_link:
+        body += f"Please join us today at {config.meeting_time} at {config.meeting_link}\n."
+
     message = {
         "channel": config.channel,
         "unfurl_links": True,

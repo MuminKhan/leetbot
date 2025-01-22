@@ -1,0 +1,19 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "leetbot"
+resolve_s3 = true
+s3_prefix = "leetbot"
+region = "us-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = [
+    "AppDataJsonPath=leetbot.json",
+    "LeetbotQuestionDifficulty=easy,medium,hard",
+    "LeetbotQuestionQuantity=2",
+    "LeetbotSlackAlertsEnabled=true",
+    "LeetbotSlackChannel=leetcode",
+    "LeetbotSlackToken=<your-slack-token>",
+    "LeetbotMeetingTime=1PM PT",
+    "LeetbotMeetingLink=<your-meeting-link>",
+]
+image_repositories = []

@@ -9,6 +9,8 @@ class Config(object):
     LEETBOT_QUESTION_QUANTITY: str = "LEETBOT_QUESTION_QUANTITY"
     LEETBOT_SEND_CHANNEL_ALERT: str = "LEETBOT_SEND_CHANNEL_ALERT"
     LEETBOT_SLACK_TOKEN: str = "LEETBOT_SLACK_TOKEN"
+    LEETBOT_MEETING_TIME: str = "LEETBOT_MEETING_TIME"
+    LEETBOT_MEETING_LINK: str = "LEETBOT_MEETING_LINK"
     DIFFICULTY_OPTIONS: set[str] = {"easy", "medium", "hard"}
 
     def __new__(cls):
@@ -22,6 +24,8 @@ class Config(object):
         self.data_file: str = environ.get(Config.LEETBOT_JSON_PATH, "leetbot.json")
         self.difficulty: set[str] = environ.get(Config.LEETBOT_QUESTION_DIFFICULTY, Config.DIFFICULTY_OPTIONS)
         self.quantity: int = int(environ.get(Config.LEETBOT_QUESTION_QUANTITY, 1))
+        self.meeting_time: str = environ.get(Config.LEETBOT_MEETING_TIME, None)
+        self.meeting_link: str = environ.get(Config.LEETBOT_MEETING_LINK, None)
         self.slack_token: str = environ.get(Config.LEETBOT_SLACK_TOKEN, None)
 
         if not isinstance(self.alert, bool):
